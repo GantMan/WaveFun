@@ -15,6 +15,7 @@ import {
   Easing,
   Dimensions
 } from 'react-native'
+import SinWave from './SinWave'
 
 const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
@@ -47,6 +48,7 @@ export default class WaveFun extends Component {
       <View style={styles.container}>
         <Animated.View style={[styles.box, animatedStyle]}>
           <Image source={require('./infinite_red.png')} />
+          <SinWave />
         </Animated.View>
       </View>
     )
@@ -68,6 +70,6 @@ const styles = StyleSheet.create({
     width: 100,
     overflow: 'hidden'
   },
-});
+})
 
 AppRegistry.registerComponent('WaveFun', () => WaveFun);
