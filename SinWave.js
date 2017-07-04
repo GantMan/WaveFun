@@ -13,34 +13,31 @@ import {
 const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
 
+const animateSin = (val) => {
+  // access private value of animated ewwwww
+  const toValue = val._value === 0 ? 30 : 0
+  Animated.timing(val, {
+    toValue,
+    duration: 1000
+  }).start(endState => {
+    animateSin(val)
+  })
+}
+
 export default class SinWave extends Component {
 
   componentWillMount() {
     this.animatedValue = new Animated.Value(0)
   }
 
-  animateDown = (val) => Animated.timing(val, {
-    toValue: 30,
-    duration: 3000,
-    useNativeDriver: true
-  })
-
-  animateUp = (val) => Animated.timing(val, {
-    toValue: 0,
-    duration: 3000,
-    useNativeDriver: true
-  })
-
   componentDidMount() {
     animateDown = {
       toValue: 30,
-      duration: 3000,
-      delay: 5000,
-      useNativeDriver: true
+      duration: 1000,
+      delay: 1000
     }
-    Animated.timing(this.animatedValue, animateDown).start(endState => {
-      Animated.timing(this.animatedValue, {toValue: 0, duration: 3000, useNativeDriver: true}).start()
-    })
+
+    animateSin(this.animatedValue)
   }
 
   renderDots () {
@@ -48,10 +45,10 @@ export default class SinWave extends Component {
     return (
       <View style={{flexDirection: 'row'}}>
         <Animated.View style={[styles.circle, animatedStyle]} />
-        <Animated.View style={[styles.circle]} />
-        <Animated.View style={[styles.circle]} />
-        <Animated.View style={[styles.circle]} />
-        <Animated.View style={[styles.circle]} />
+        <Animated.View style={[styles.circle, animatedStyle]} />
+        <Animated.View style={[styles.circle, animatedStyle]} />
+        <Animated.View style={[styles.circle, animatedStyle]} />
+        <Animated.View style={[styles.circle, animatedStyle]} />
       </View>
     )
   }

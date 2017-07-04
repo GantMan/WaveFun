@@ -31,12 +31,12 @@ export default class WaveFun extends Component {
     Animated.sequence([
       Animated.timing(this.animatedHeightValue, {
         toValue: screenHeight,
-        duration: 3000,
+        duration: 300,
         easing: Easing.bounce
       }),
       Animated.timing(this.animatedWidthValue, {
         toValue: screenWidth,
-        duration: 1000,
+        duration: 100,
         easing: Easing.bounce
       })
     ]).start()
