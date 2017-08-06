@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -15,11 +15,12 @@ import {
   Easing,
   Dimensions
 } from 'react-native'
+import SinWave from './SinWave'
 
 const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
 
-export default class WaveFun extends Component {
+export default class WaveFun extends PureComponent {
 
   componentWillMount() {
     this.animatedHeightValue = new Animated.Value(100)
@@ -46,7 +47,18 @@ export default class WaveFun extends Component {
     return (
       <View style={styles.container}>
         <Animated.View style={[styles.box, animatedStyle]}>
+          <SinWave />
+
           <Image source={require('./infinite_red.png')} />
+
+          <SinWave
+            flat
+            fade
+            dotCount={50}
+            delayGap={200}
+            period={3000}
+            style={{backgroundColor: '#feffff'}}
+          />
         </Animated.View>
       </View>
     )
@@ -63,11 +75,11 @@ const styles = StyleSheet.create({
   box: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#C53938',
+    backgroundColor: '#c93939',
     height: 100,
     width: 100,
     overflow: 'hidden'
   },
-});
+})
 
 AppRegistry.registerComponent('WaveFun', () => WaveFun);
