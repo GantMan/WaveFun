@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -10,52 +10,63 @@ import {
   Dimensions
 } from 'react-native'
 
-const screenWidth = Dimensions.get('window').width
-const screenHeight = Dimensions.get('window').height
+const defaultDotSize = 10
 
-const animateSin = (val) => {
-  // access private value of animated ewwwww
-  const toValue = val._value === 0 ? 30 : 0
-  Animated.timing(val, {
-    toValue,
-    duration: 1000
-  }).start(endState => {
-    animateSin(val)
-  })
-}
-
-export default class SinWave extends Component {
+export default class SinWave extends PureComponent {
 
   componentWillMount() {
-    this.animatedValue = new Animated.Value(0)
-  }
+    this.animatedArray = []
 
-  componentDidMount() {
-    animateDown = {
-      toValue: 30,
-      duration: 1000,
-      delay: 1000
+    for (let i = 0; i < this.props.dotCount; i++) {
+      this.animatedArray.push(new Animated.Value(0))
+      this.animateSin(this.animatedArray[i], i)
     }
-
-    animateSin(this.animatedValue)
   }
 
-  renderDots () {
-    const animatedStyle = { transform: [{translateY: this.animatedValue}] }
-    return (
-      <View style={{flexDirection: 'row'}}>
-        <Animated.View style={[styles.circle, animatedStyle]} />
-        <Animated.View style={[styles.circle, animatedStyle]} />
-        <Animated.View style={[styles.circle, animatedStyle]} />
-        <Animated.View style={[styles.circle, animatedStyle]} />
-        <Animated.View style={[styles.circle, animatedStyle]} />
-      </View>
-    )
+  animateSin = (val, index) => {
+    const {delayGap, crest, period} = this.props
+    // access private value of animated ewwwww
+    const toValue = val._value === 0 ? crest : 0
+    const delay = index * delayGap
+    Animated.timing(val, {
+      toValue,
+      delay,
+      duration: period/2,
+      // useNativeDriver: true
+    }).start(endState => {
+      this.animateSin(val)
+    })
   }
 
-  render () {
-    return this.renderDots()
-  }
+  render = () =>
+    <View style={{flexDirection: 'row'}}>
+      {
+        this.animatedArray.map((val, index) => {
+          const {fade, flat, dotCount} = this.props
+          const gradient = fade ? index/dotCount : 1
+          const flatten = flat ?
+            { height: gradient * 5 } :
+            {}
+          const animatedStyle = {
+            ...flatten,
+            transform: [{translateY: val}],
+            opacity: gradient
+          }
+          return (
+            <Animated.View key={`dot${index}`} style={[styles.circle, animatedStyle, this.props.style]} />
+          )
+        })
+      }
+    </View>
+}
+
+SinWave.defaultProps = {
+  dotCount: 5,
+  delayGap: 400,
+  crest: -30,
+  flat: false,
+  fade: false,
+  period: 2000
 }
 
 const styles = StyleSheet.create({
@@ -63,8 +74,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    height: 10,
-    width: 10,
-    borderRadius: 10/2
+    height: defaultDotSize,
+    width: defaultDotSize,
+    borderRadius: defaultDotSize/2
   },
 })

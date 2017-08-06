@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -20,7 +20,7 @@ import SinWave from './SinWave'
 const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
 
-export default class WaveFun extends Component {
+export default class WaveFun extends PureComponent {
 
   componentWillMount() {
     this.animatedHeightValue = new Animated.Value(100)
@@ -31,12 +31,12 @@ export default class WaveFun extends Component {
     Animated.sequence([
       Animated.timing(this.animatedHeightValue, {
         toValue: screenHeight,
-        duration: 300,
+        duration: 3000,
         easing: Easing.bounce
       }),
       Animated.timing(this.animatedWidthValue, {
         toValue: screenWidth,
-        duration: 100,
+        duration: 1000,
         easing: Easing.bounce
       })
     ]).start()
@@ -47,8 +47,18 @@ export default class WaveFun extends Component {
     return (
       <View style={styles.container}>
         <Animated.View style={[styles.box, animatedStyle]}>
-          <Image source={require('./infinite_red.png')} />
           <SinWave />
+
+          <Image source={require('./infinite_red.png')} />
+
+          <SinWave
+            flat
+            fade
+            dotCount={50}
+            delayGap={200}
+            period={3000}
+            style={{backgroundColor: '#feffff'}}
+          />
         </Animated.View>
       </View>
     )
@@ -65,7 +75,7 @@ const styles = StyleSheet.create({
   box: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#C53938',
+    backgroundColor: '#c93939',
     height: 100,
     width: 100,
     overflow: 'hidden'
