@@ -32,7 +32,7 @@ export default class SinWave extends PureComponent {
       toValue,
       delay,
       duration: period/2,
-      useNativeDriver: true
+      // useNativeDriver: true
     }).start(endState => {
       this.animateSin(val)
     })
